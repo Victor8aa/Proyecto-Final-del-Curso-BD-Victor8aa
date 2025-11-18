@@ -16,6 +16,7 @@ public class VistaReservaciones extends JFrame {
     private JTable tablaReservas;
     private JButton btnRefrescar;
     private JButton btnNuevaReserva;
+    private JButton btnCancelar;
 
     public VistaReservaciones() {
         setTitle("Historial de Reservaciones");
@@ -40,6 +41,68 @@ public class VistaReservaciones extends JFrame {
                 dialogo.setVisible(true);
 
                 cargarDatosReservaciones();
+            }
+        });
+
+        btnCancelar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int fila = tablaReservas.getSelectedRow();
+                if (fila == -1) {
+                    JOptionPane.showMessageDialog(VistaReservaciones.this, "Seleccione una reserva para cancelar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                int bookingId = (int) tablaReservas.getValueAt(fila, 0);
+
+                int confirm = JOptionPane.showConfirmDialog(VistaReservaciones.this,
+                        "¿Está seguro de cancelar la reserva #" + bookingId + "?\nEsta acción no se puede deshacer.",
+                        "Confirmar Cancelación", JOptionPane.YES_NO_OPTION);
+
+                if (confirm != JOptionPane.YES_OPTION) return;
+
+                Connection con = null;
+                PreparedStatement psRoom = null;
+                PreparedStatement psBooking = null;
+
+                try {
+                    con = ConexionDB.getConexion();
+                    con.setAutoCommit(false);
+
+
+                    String sqlRoom = "DELETE FROM room_bookings WHERE booking_id = ?";
+                    psRoom = con.prepareStatement(sqlRoom);
+                    psRoom.setInt(1, bookingId);
+                    psRoom.executeUpdate();
+
+                    String sqlBooking = "DELETE FROM bookings WHERE booking_id = ?";
+                    psBooking = con.prepareStatement(sqlBooking);
+                    psBooking.setInt(1, bookingId);
+                    int afectados = psBooking.executeUpdate();
+
+                    if (afectados > 0) {
+                        con.commit();
+                        JOptionPane.showMessageDialog(VistaReservaciones.this, "Reserva cancelada exitosamente.");
+                        cargarDatosReservaciones();
+                    } else {
+                        con.rollback();
+                        JOptionPane.showMessageDialog(VistaReservaciones.this, "No se encontró la reserva.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                } catch (SQLException ex) {
+                    try {
+                        if (con != null) con.rollback();
+                    } catch (SQLException exRollback) { exRollback.printStackTrace(); }
+
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(VistaReservaciones.this, "Error crítico al cancelar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                } finally {
+                    try {
+                        if (con != null) con.setAutoCommit(true);
+                        if (psRoom != null) psRoom.close();
+                        if (psBooking != null) psBooking.close();
+                    } catch (SQLException ex) { ex.printStackTrace(); }
+                }
             }
         });
 

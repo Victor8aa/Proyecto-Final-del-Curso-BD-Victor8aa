@@ -60,12 +60,21 @@ public class VistaHoteles extends JFrame {
             }
         });
 
+        JMenu menuHuespedes = new JMenu("Huéspedes");
+        JMenuItem itemVerHuespedes = new JMenuItem("Gestionar Huéspedes");
+        itemVerHuespedes.addActionListener(e -> {
+            new VistaHuespedes().setVisible(true);
+        });
+
         menuReservas.add(itemVerReservas);
         menuReservas.addSeparator();
         menuReservas.add(itemNuevaReserva);
 
+        menuHuespedes.add(itemVerHuespedes);
+
         menuBar.add(menuArchivo);
         menuBar.add(menuReservas);
+        menuBar.add(menuHuespedes);
 
         setJMenuBar(menuBar);
 

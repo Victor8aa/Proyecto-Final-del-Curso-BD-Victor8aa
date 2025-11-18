@@ -45,7 +45,7 @@
           <component id="6d1a9" class="javax.swing.JButton" binding="btnModificar">
             <constraints/>
             <properties>
-              <text value="Guardar"/>
+              <text value="Modificar"/>
             </properties>
           </component>
           <hspacer id="11db2">
