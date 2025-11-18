@@ -1,0 +1,112 @@
+package vistas;
+
+import com.hotelReservations.datos.ConexionDB;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class VistaReservaciones extends JFrame {
+    private JPanel panelReservas;
+    private JTable tablaReservas;
+    private JButton btnRefrescar;
+    private JButton btnNuevaReserva;
+
+    public VistaReservaciones() {
+        setTitle("Historial de Reservaciones");
+        setContentPane(panelReservas);
+        setSize(900, 600);
+        setLocationRelativeTo(null);
+
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //cierra solo la ventana no la app entera
+
+
+        btnRefrescar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cargarDatosReservaciones();
+            }
+        });
+
+        btnNuevaReserva.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DialogoReserva dialogo = new DialogoReserva(VistaReservaciones.this);
+                dialogo.setVisible(true);
+
+                cargarDatosReservaciones();
+            }
+        });
+
+        cargarDatosReservaciones();
+    }
+
+   //Reporte
+    private void cargarDatosReservaciones() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID Reserva");
+        modelo.addColumn("Huésped");
+        modelo.addColumn("Hotel");
+        modelo.addColumn("Habitación");
+        modelo.addColumn("Desde");
+        modelo.addColumn("Hasta");
+        modelo.addColumn("Noches");
+
+        Connection con = ConexionDB.getConexion();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        // --- ¡LA CONSULTA MÁGICA (JOIN)! ---
+        String sql = "SELECT " +
+                "    b.booking_id, " +
+                "    g.guest_name, " +
+                "    h.hotel_name, " +
+                "    rb.room_type_code, " +
+                "    b.date_from, " +
+                "    b.date_to, " +
+                "    (b.date_to - b.date_from) AS noches " +
+                "FROM bookings b " +
+                "JOIN guests g ON b.guest_number = g.guest_number " +
+                "JOIN room_bookings rb ON b.booking_id = rb.booking_id " +
+                "JOIN hotels h ON rb.hotel_id = h.hotel_id " +
+                "ORDER BY b.date_from DESC"; // muestra las más nuevas primero
+
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            modelo.setRowCount(0);
+
+            while (rs.next()) {
+                Object[] fila = new Object[7];
+                fila[0] = rs.getInt("booking_id");
+                fila[1] = rs.getString("guest_name");
+                fila[2] = rs.getString("hotel_name");
+                fila[3] = rs.getString("room_type_code");
+                fila[4] = rs.getDate("date_from").toString();
+                fila[5] = rs.getDate("date_to").toString();
+                fila[6] = rs.getInt("noches");
+
+                modelo.addRow(fila);
+            }
+
+            tablaReservas.setModel(modelo);
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al cargar las reservaciones", "Error SQL", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+}

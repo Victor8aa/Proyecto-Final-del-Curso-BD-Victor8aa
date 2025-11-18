@@ -17,22 +17,67 @@ public class VistaHoteles extends JFrame {
 
     private JPanel panelPrincipal;
     private JTable tablaHoteles;
-    private JButton btnCargar;
     private JButton btnNuevo;
     private JButton btnModificar;
     private JButton btnEliminar;
-    private JButton btnFiltrar;
     private JTextField txtFiltro;
     private JComboBox comboFiltroPais;
 
-    public VistaHoteles(){
+    // Constructor
+    public VistaHoteles() {
         setTitle("Gestión de Hoteles");
         setContentPane(panelPrincipal);
         setSize(800, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        cargarComboPaises();
-        cargarDatosHoteles("");
+
+        JMenuBar menuBar = new JMenuBar();
+
+        JMenu menuArchivo = new JMenu("Archivo");
+        JMenuItem itemSalir = new JMenuItem("Salir");
+        itemSalir.addActionListener(e -> System.exit(0));
+        menuArchivo.add(itemSalir);
+
+        JMenu menuReservas = new JMenu("Reservaciones");
+
+        JMenuItem itemVerReservas = new JMenuItem("Ver Historial Completo");
+        itemVerReservas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VistaReservaciones ventanaReservas = new VistaReservaciones();
+                ventanaReservas.setVisible(true);
+            }
+        });
+
+        JMenuItem itemNuevaReserva = new JMenuItem("Nueva Reserva");
+        itemNuevaReserva.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Abrimos el diálogo directamente.
+                // Como ya le pusimos el ComboBox de hoteles, ¡funciona perfecto desde aquí!
+                DialogoReserva dialogo = new DialogoReserva(VistaHoteles.this);
+                dialogo.setVisible(true);
+            }
+        });
+
+        menuReservas.add(itemVerReservas);
+        menuReservas.addSeparator();
+        menuReservas.add(itemNuevaReserva);
+
+        menuBar.add(menuArchivo);
+        menuBar.add(menuReservas);
+
+        setJMenuBar(menuBar);
+
+        itemVerReservas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Abrimos la ventana de la tabla de reservaciones
+                VistaReservaciones ventanaReservas = new VistaReservaciones();
+                ventanaReservas.setVisible(true);
+            }
+        });
+
 
         btnEliminar.addActionListener(new ActionListener() {
             @Override
@@ -156,6 +201,11 @@ public class VistaHoteles extends JFrame {
                 actualizarTablaConFiltro();
             }
         });
+
+
+        cargarComboPaises();
+        cargarDatosHoteles("");
+
     }
 
     private void actualizarTablaConFiltro() {
