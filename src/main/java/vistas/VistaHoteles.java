@@ -22,6 +22,8 @@ public class VistaHoteles extends JFrame {
     private JButton btnEliminar;
     private JTextField txtFiltro;
     private JComboBox comboFiltroPais;
+    private JPanel panel;
+    private JScrollPane jScrollPane1;
 
     // Constructor
     public VistaHoteles() {
@@ -30,6 +32,20 @@ public class VistaHoteles extends JFrame {
         setSize(800, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Botón NUEVO verde
+        btnNuevo.setBackground(new java.awt.Color(148, 211, 90));
+        btnNuevo.setForeground(java.awt.Color.WHITE);
+
+        //Botón MODIFICAR naranja
+        btnModificar.setBackground(new java.awt.Color(172, 107, 198));
+        btnModificar.setForeground(java.awt.Color.WHITE);
+
+        // Botón ELIMINAR rojo
+        btnEliminar.setBackground(new java.awt.Color(220, 53, 69));
+        btnEliminar.setForeground(java.awt.Color.WHITE);
+
+        jScrollPane1.setBorder(BorderFactory.createEmptyBorder(20, 50, 50, 50));
 
         JMenuBar menuBar = new JMenuBar();
 
@@ -316,6 +332,7 @@ public class VistaHoteles extends JFrame {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al cargar filtro de países", "Error", JOptionPane.ERROR_MESSAGE);
         }
+
     }
 
 }

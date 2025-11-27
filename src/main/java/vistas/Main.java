@@ -15,9 +15,10 @@ public class Main {
             @Override
             public void run() {
                 VistaLogin ventanaLogin = new VistaLogin();
+                ventanaLogin.pack();
                 ventanaLogin.setLocationRelativeTo(null);
                 ventanaLogin.setVisible(true);
             }
-        }); // ❤️ Atte: Victor y Jesus
+        });
     }
 }

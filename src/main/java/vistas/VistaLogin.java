@@ -3,6 +3,7 @@ package vistas;
 import com.hotelReservations.datos.ConexionDB;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,6 +15,7 @@ public class VistaLogin extends JFrame{
     private JButton btnConectar;
     private JButton btnSalir;
     private JPanel panelLogin;
+    private JPanel panelBotones;
 
     public VistaLogin() {
         setTitle("Conexión a Base de Datos");
@@ -21,7 +23,16 @@ public class VistaLogin extends JFrame{
         setSize(400, 250);
         setLocationRelativeTo(null);
 
+        // Conectar: Botón Verde
+        btnConectar.setBackground(new java.awt.Color(117, 177, 211));
+        btnConectar.setForeground(java.awt.Color.WHITE);
+
+        // Salir: Botón Rojo
+        btnSalir.setBackground(new java.awt.Color(220, 53, 69));
+        btnSalir.setForeground(java.awt.Color.WHITE);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        this.getRootPane().setDefaultButton(btnConectar);
 
         btnSalir.addActionListener(new ActionListener() {
             @Override
