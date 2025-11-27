@@ -27,6 +27,16 @@ public class VistaReservaciones extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //cierra solo la ventana no la app entera
 
 
+        btnNuevaReserva.setBackground(new java.awt.Color(148, 211, 90));
+        btnNuevaReserva.setForeground(java.awt.Color.WHITE);
+
+        btnCancelar.setBackground(new java.awt.Color(210, 83, 78));
+        btnCancelar.setForeground(java.awt.Color.WHITE);
+
+        btnRefrescar.setBackground(new java.awt.Color(117, 177, 211));
+        btnRefrescar.setForeground(java.awt.Color.WHITE);
+
+
         btnRefrescar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -159,6 +169,7 @@ public class VistaReservaciones extends JFrame {
             }
 
             tablaReservas.setModel(modelo);
+            tablaBonita1();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -171,5 +182,29 @@ public class VistaReservaciones extends JFrame {
                 ex.printStackTrace();
             }
         }
+    }
+    public void tablaBonita1() {
+
+        // centrar
+        javax.swing.table.DefaultTableCellRenderer centro = new javax.swing.table.DefaultTableCellRenderer();
+        centro.setHorizontalAlignment(javax.swing.JLabel.CENTER);
+
+        // centrar solo ID
+        // ID es la posicion 0
+        tablaReservas.getColumnModel().getColumn(0).setCellRenderer(centro);
+
+        javax.swing.table.JTableHeader header = tablaReservas.getTableHeader();
+
+        // color de fondo del encabezado
+        header.setBackground(new java.awt.Color(33, 37, 41)); //color gris obscuro
+
+        // color blanco letra
+        header.setForeground(java.awt.Color.WHITE);
+
+        // fuente letra color negro
+        header.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+
+        // quitar el borde :)
+        header.setOpaque(false);
     }
 }

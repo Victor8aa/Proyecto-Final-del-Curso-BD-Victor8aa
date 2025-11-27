@@ -19,6 +19,10 @@ public class VistaHuespedes extends JFrame {
     private JButton btnNuevoHuesped;
     private JTextField txtFiltro;
     private JPanel panelPrincipal;
+    private JButton eliminarHButton;
+    private JPanel barraHerramientas;
+    private JScrollPane panelTabla;
+    private JPanel panelBuscar;
 
     public VistaHuespedes() {
         setTitle("Gestión de Huéspedes");
@@ -43,7 +47,34 @@ public class VistaHuespedes extends JFrame {
             }
         });
 
+
+        btnNuevoHuesped.setBackground(new java.awt.Color(148, 211, 90));
+        btnNuevoHuesped.setForeground(java.awt.Color.WHITE);
+
+
+        eliminarHButton.setBackground(new java.awt.Color(210, 83, 78));
+        eliminarHButton.setForeground(java.awt.Color.WHITE);
+
         cargarDatosHuespedes("");
+
+        // este es el codigo para hacer padding en cada seccion
+
+        try {
+            // barraHerramientas (es donde estan botones)
+            barraHerramientas.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 0, 20, 0));
+        } catch (Exception e) {}
+
+        // panelBuscar (esta el buscador)
+        if (panelBuscar != null) {
+            panelBuscar.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 20, 20, 20));
+        }
+
+        // panelTabla (esta la tabla)
+        try {
+            panelTabla.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 50, 30, 50));
+        } catch (Exception e) {
+
+        }
     }
 
     private void cargarDatosHuespedes(String filtro) {
@@ -74,6 +105,7 @@ public class VistaHuespedes extends JFrame {
             }
 
             tablaHuespedes.setModel(modelo);
+            tablaBonita2();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -125,5 +157,29 @@ public class VistaHuespedes extends JFrame {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al guardar: " + ex.getMessage(), "Error SQL", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    public void tablaBonita2() {
+
+        // centrar
+        javax.swing.table.DefaultTableCellRenderer centro = new javax.swing.table.DefaultTableCellRenderer();
+        centro.setHorizontalAlignment(javax.swing.JLabel.CENTER);
+
+        // centrar solo ID
+        // ID es la posicion 0
+        tablaHuespedes.getColumnModel().getColumn(0).setCellRenderer(centro);
+
+        javax.swing.table.JTableHeader header = tablaHuespedes.getTableHeader();
+
+        // color de fondo del encabezado
+        header.setBackground(new java.awt.Color(33, 37, 41)); //color gris obscuro
+
+        // color blanco letra
+        header.setForeground(java.awt.Color.WHITE);
+
+        // fuente letra color negro
+        header.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+
+        // quitar el borde :)
+        header.setOpaque(false);
     }
 }

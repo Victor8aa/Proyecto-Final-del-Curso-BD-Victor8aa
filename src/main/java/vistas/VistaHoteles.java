@@ -22,8 +22,9 @@ public class VistaHoteles extends JFrame {
     private JButton btnEliminar;
     private JTextField txtFiltro;
     private JComboBox comboFiltroPais;
-    private JPanel panel;
+    private JPanel panelFiltros;
     private JScrollPane jScrollPane1;
+    private JToolBar barraHerramientas;
 
     // Constructor
     public VistaHoteles() {
@@ -38,7 +39,7 @@ public class VistaHoteles extends JFrame {
         btnNuevo.setForeground(java.awt.Color.WHITE);
 
         //Botón MODIFICAR naranja
-        btnModificar.setBackground(new java.awt.Color(172, 107, 198));
+        btnModificar.setBackground(new java.awt.Color(211, 209, 53));
         btnModificar.setForeground(java.awt.Color.WHITE);
 
         // Botón ELIMINAR rojo
@@ -57,13 +58,15 @@ public class VistaHoteles extends JFrame {
         JMenu menuReservas = new JMenu("Reservaciones");
 
         JMenuItem itemVerReservas = new JMenuItem("Ver Historial Completo");
-        itemVerReservas.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                VistaReservaciones ventanaReservas = new VistaReservaciones();
-                ventanaReservas.setVisible(true);
-            }
-        });
+
+        //comente esto porque genera que el Historial de Reservas se abriera dos veces, ya que Intellij tenia un listener automatico escondido
+        //itemVerReservas.addActionListener(new ActionListener() {
+           // @Override
+           // public void actionPerformed(ActionEvent e) {
+               // VistaReservaciones ventanaReservas = new VistaReservaciones();
+                //ventanaReservas.setVisible(true);
+            //}
+       // });
 
         JMenuItem itemNuevaReserva = new JMenuItem("Nueva Reserva");
         itemNuevaReserva.addActionListener(new ActionListener() {
@@ -93,6 +96,38 @@ public class VistaHoteles extends JFrame {
         menuBar.add(menuHuespedes);
 
         setJMenuBar(menuBar);
+
+        // estilo general de la barra
+        menuBar.setOpaque(true);
+        menuBar.setBackground(new java.awt.Color(168, 173, 171)); // color fondo gris
+        menuBar.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5)); // aire
+        menuBar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR)); // cursor
+
+        // fuente
+        java.awt.Font fuenteTitulos = new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14);
+        java.awt.Font fuenteItems = new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14);
+
+        // estilo de ARCHIVO
+        menuArchivo.setForeground(java.awt.Color.WHITE);
+        menuArchivo.setFont(fuenteTitulos);
+
+        // Estilo de sus items (Salir)
+        itemSalir.setFont(fuenteItems);
+
+        // estilo RESERVACIONES
+        menuReservas.setForeground(java.awt.Color.WHITE);
+        menuReservas.setFont(fuenteTitulos);
+
+        // Estilo de sus items
+        itemVerReservas.setFont(fuenteItems);
+        itemNuevaReserva.setFont(fuenteItems);
+
+        // estilo HUESPEDES
+        menuHuespedes.setForeground(java.awt.Color.WHITE);
+        menuHuespedes.setFont(fuenteTitulos);
+
+        // Estilo de sus items
+        itemVerHuespedes.setFont(fuenteItems);
 
         itemVerReservas.addActionListener(new ActionListener() {
             @Override
@@ -231,6 +266,25 @@ public class VistaHoteles extends JFrame {
         cargarComboPaises();
         cargarDatosHoteles("");
 
+        // este es el codigo para hacer padding en cada seccion
+
+        try {
+            // barraHerramientas (es donde estan botones 'Nuevo', 'Modificar', 'Eliminar')
+            barraHerramientas.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 0, 20, 0));
+            barraHerramientas.setFloatable(false); // Para que no se mueva
+        } catch (Exception e) {}
+
+        // panelFiltros (es donde esta lo de 'Filtrar' y 'Pais')
+        if (panelFiltros != null) {
+            panelFiltros.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 20, 20));
+        }
+
+        // jScrollPane1
+        try {
+            jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 50, 30, 50));
+        } catch (Exception e) {
+
+        }
     }
 
     private void actualizarTablaConFiltro() {
@@ -298,6 +352,7 @@ public class VistaHoteles extends JFrame {
             }
 
             tablaHoteles.setModel(modelo);
+            tablaBonita();
 
         } catch (SQLException ex) {
             System.err.println("Error al cargar los datos de hoteles.");
@@ -335,4 +390,30 @@ public class VistaHoteles extends JFrame {
 
     }
 
+    public void tablaBonita() {
+
+        // centrar
+        javax.swing.table.DefaultTableCellRenderer centro = new javax.swing.table.DefaultTableCellRenderer();
+        centro.setHorizontalAlignment(javax.swing.JLabel.CENTER);
+
+        // centrar solo ID
+        // ID es la posicion 0
+        tablaHoteles.getColumnModel().getColumn(0).setCellRenderer(centro);
+
+        javax.swing.table.JTableHeader header = tablaHoteles.getTableHeader();
+
+        // color de fondo del encabezado
+        header.setBackground(new java.awt.Color(33, 37, 41)); //color gris obscuro
+
+        // color blanco letra
+        header.setForeground(java.awt.Color.WHITE);
+
+        // fuente letra color negro
+        header.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+
+        // quitar el borde :)
+        header.setOpaque(false);
+    }
 }
+
+

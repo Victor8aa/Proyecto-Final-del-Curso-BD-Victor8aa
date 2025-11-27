@@ -28,7 +28,7 @@ public class DialogoHotel extends JDialog {
         super(parent, "Nuevo Hotel", true);
 
         setContentPane(panelDialogo);
-        setSize(500, 400);
+        setSize(500, 450);
         setLocationRelativeTo(parent);
 
         cargarCombos();

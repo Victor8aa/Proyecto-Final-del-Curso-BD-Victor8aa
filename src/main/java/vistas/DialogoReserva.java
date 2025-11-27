@@ -39,6 +39,7 @@ public class DialogoReserva extends JDialog {
         btnConfirmar.addActionListener(e -> confirmarReservaConTransaccion());
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
     }
 
     private void cargarComboHoteles() {
