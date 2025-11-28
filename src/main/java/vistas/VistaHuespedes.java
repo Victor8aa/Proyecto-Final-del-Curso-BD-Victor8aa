@@ -47,6 +47,36 @@ public class VistaHuespedes extends JFrame {
             }
         });
 
+        //Listener para Eliminar Huésped
+        eliminarHButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int filaSeleccionada = tablaHuespedes.getSelectedRow();
+
+                if (filaSeleccionada == -1) {
+                    JOptionPane.showMessageDialog(VistaHuespedes.this,
+                            "Debe seleccionar un huésped de la lista para eliminarlo.",
+                            "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                // El ID está en la columna 0 del modelo de la tabla
+                // Aseguramos que se convierta a entero correctamente
+                Object valorId = tablaHuespedes.getValueAt(filaSeleccionada, 0);
+                int idHuesped = Integer.parseInt(valorId.toString());
+
+                int confirmacion = JOptionPane.showConfirmDialog(
+                        VistaHuespedes.this,
+                        "¿Está seguro de que desea eliminar el huésped con ID " + idHuesped + "?\nEsta acción no se puede deshacer.",
+                        "Confirmar Eliminación",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
+
+                if (confirmacion == JOptionPane.YES_OPTION) {
+                    eliminarHuespedEnBD(idHuesped);
+                }
+            }
+        });
 
         btnNuevoHuesped.setBackground(new java.awt.Color(148, 211, 90));
         btnNuevoHuesped.setForeground(java.awt.Color.WHITE);
@@ -156,6 +186,34 @@ public class VistaHuespedes extends JFrame {
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al guardar: " + ex.getMessage(), "Error SQL", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    //  Eliminar Huésped
+    private void eliminarHuespedEnBD(int idHuesped) {
+        Connection con = ConexionDB.getConexion();
+        String sql = "DELETE FROM guests WHERE guest_number = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idHuesped);
+
+            int afectados = ps.executeUpdate();
+
+            if (afectados > 0) {
+                JOptionPane.showMessageDialog(this, "Huésped eliminado exitosamente.");
+                cargarDatosHuespedes(""); // Recargar la tabla para ver los cambios
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró el huésped.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            }
+
+        } catch (SQLException ex) {
+            // Manejar la restricción de llave foránea (si el huésped tiene reservas)
+            if (ex.getSQLState() != null && ex.getSQLState().equals("23503")) {
+                JOptionPane.showMessageDialog(this, "No se puede eliminar el huésped porque tiene reservas activas o historial.", "Error de Integridad", JOptionPane.ERROR_MESSAGE);
+            } else {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage(), "Error SQL", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     public void tablaBonita2() {
