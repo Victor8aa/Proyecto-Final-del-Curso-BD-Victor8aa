@@ -25,6 +25,7 @@ public class VistaHoteles extends JFrame {
     private JPanel panelFiltros;
     private JScrollPane jScrollPane1;
     private JToolBar barraHerramientas;
+    private JButton btnReportes;
 
     // Constructor
     public VistaHoteles() {
@@ -45,6 +46,9 @@ public class VistaHoteles extends JFrame {
         // Botón ELIMINAR rojo
         btnEliminar.setBackground(new java.awt.Color(220, 53, 69));
         btnEliminar.setForeground(java.awt.Color.WHITE);
+
+        btnReportes.setBackground(new java.awt.Color(117, 177, 211));
+        btnReportes.setForeground(java.awt.Color.WHITE);
 
         jScrollPane1.setBorder(BorderFactory.createEmptyBorder(20, 50, 50, 50));
 
@@ -285,6 +289,13 @@ public class VistaHoteles extends JFrame {
         } catch (Exception e) {
 
         }
+        btnReportes.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VistaReportes ventanaReportes = new VistaReportes();
+                ventanaReportes.setVisible(true);
+            }
+        });
     }
 
     private void actualizarTablaConFiltro() {
