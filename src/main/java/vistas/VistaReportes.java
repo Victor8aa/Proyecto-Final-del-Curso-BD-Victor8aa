@@ -64,6 +64,8 @@ public class VistaReportes extends JFrame {
                 });
             }
             tablaReservas.setModel(modelo);
+
+
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al cargar Informe 1: " + ex.getMessage(), "Error SQL", JOptionPane.ERROR_MESSAGE);
         }
@@ -125,6 +127,8 @@ public class VistaReportes extends JFrame {
                 });
             }
             tablaTarifas.setModel(modelo);
+
+
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al cargar Informe 3. Verifique tablas de tarifas: " + ex.getMessage(), "Error SQL", JOptionPane.ERROR_MESSAGE);
         }

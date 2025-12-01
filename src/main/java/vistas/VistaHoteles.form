@@ -65,6 +65,7 @@
           <component id="aca69" class="javax.swing.JButton" binding="btnReportes">
             <constraints/>
             <properties>
+              <font name="Bookshelf Symbol 7" size="20"/>
               <text value="Informes"/>
             </properties>
           </component>
