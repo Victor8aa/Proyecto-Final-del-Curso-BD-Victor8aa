@@ -24,5 +24,4 @@ Configuración
 2. Configurar la conexión a la base de datos `Casa_de_Jade` en `ConexionDB.java`.
 3. Ejecutar la clase `Launcher.java`.
 
-Capturas de pantalla
 <img width="590" height="439" alt="Captura de pantalla 2026-10-08 a la(s) 6 01 19 p m" src="https://github.com/user-attachments/assets/c4556a36-fa3a-4081-889c-e50802e681d3" />
